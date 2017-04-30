@@ -17,7 +17,11 @@ function CommentClick(blogId){
 function publishComment(blogId){
 	var content=document.getElementById(blogId+"comment_publish").value;
 	if(content==""||content==null)alert("请输入评论");
-	else
+	else{
+		//var str = $("#wchatcontent").val();
+	     
+     	var json={"from":ID,"to":ID,"message":content,"kind":"评论"};
+     	 websocket.send(JSON.stringify(json)); 
 		$.ajax({
 			url:"query/addcomment",
 			dataType:"text",
@@ -56,6 +60,8 @@ function publishComment(blogId){
 				alert("发表评论出错")
 			}
 		});
+	}
+		
 
 
 

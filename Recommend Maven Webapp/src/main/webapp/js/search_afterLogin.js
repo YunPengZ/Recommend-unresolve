@@ -1,6 +1,11 @@
  function search(pageNumber){
+		 if((pageNumber-1)  * pageSize > totalRecord){
+	         // alert("没有更多微博！");
+	         // $(window).unbind("scroll");
+	          return ;
+	       }
         	var text=document.getElementById("search_input").value;
-        	$('#home').empty();
+        	//$('#home').empty();
         	
         	text=text.replace("[","[[]");
         	text=text.replace("_","[_]");
@@ -20,7 +25,7 @@
         	    	"id":ID},    //参数值
         	    type: "POST",   //请求方式
         	    success: function(data) {
-          	        var totalRecord = data.totalRecord;
+          	        totalRecord = data.totalRecord;
           	    	var blogset=data.dataList;
                 	    	//var praiseColor="color:#03a9f4";
                 	    	$.each(blogset,function(i,item){
@@ -33,18 +38,19 @@
                  	    			imgSrc="src/Praise.png";//未点赞
                 	    			praiseColor="color:#03a9f4";
                  	    		}
+                	    		
                 	    		if(item.blogParent!=null){//转发后的微博设置未true
                 	    			$("#home").append(
              	                           " <div class=\"card\"><!-- 转发微博的结构 -->"+
                                             " <div class=\"media-left\"><!-- 自己的头像 -->"+
                                                  "<a href=\"#\">"+
-                                                    " <img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                                 "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                                 " </a>"+
                                              "</div>"+
                                              "<div class=\"media-body\">"+
                                                "  <h5 class=\"media-heading\"><a href=\"Profile.jsp?word="+item.blogAuthor.userId+"\" id="+item.blogId+'author'+" onclick=\"javascript:window.open(\"Profile.jsp\");return false;\">"+item.blogAuthor.userName+"</a></h5>"+
                                                 " <h6 class=\"media-heading-time\">"+item.blogTime+"</h6>"+
-                                                "<p id="+item.blogId+'content'+">"+item.blogContent+"</p><!-- 转发时发的微博 -->"+
+                                                "<p id="+item.blogId+'content'+">"+TranslateToRed(item.blogContent,text)+"</p><!-- 转发时发的微博 -->"+
                                                  "<div class=\"media-body\" style=\"padding: 5px;background-color: #f2f2f5\";><!-- 被转发的微博 -->"+
                                                    "  <h5 class=\"media-heading\">"+item.blogParent.blogAuthor.userName+"</h5><!-- 参考新浪微博，没有被转发微博的博主头像 -->"+
                                                     " <h6 class=\"media-heading-time\">"+item.blogParent.blogTime+"</h6>"+
@@ -68,19 +74,20 @@
                                             "</div>"+
                                         " </div>"
              	    			);
+                	    			//appendChat(item);
              	    		}else
              	    		$("#home").append(
             	    				 "<div class=\"row clearfix box\">"+
             	    				 " <div class=\"card\">"+
                                          "<div class=\"media-left\">"+
                                              "<a href=\"#\">"+
-                                                 "<img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                             "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                              "</a>"+
                                          "</div>"+
                                          "<div class=\"media-body\">"+
                                          "  <h5 class=\"media-heading\"><a href=\"Profile.jsp?word="+item.blogAuthor.userId+"\" id="+item.blogId+'author'+" onclick=\"javascript:window.open(\"Profile.jsp\");return false;\">"+item.blogAuthor.userName+"</a></h5>"+
                                              "<h6 class=\"media-heading-time\">"+item.blogTime+"</h6>"+
-                                             "<p id="+item.blogId+'content'+">"+item.blogContent+"</p>"+
+                                             "<p id="+item.blogId+'content'+">"+TranslateToRed(item.blogContent,text)+"</p>"+
                                              "<div class=\"list-group list-group-horizontal\"  style=\"padding-left:5px;\">"+
                                                  "<a href=\"#\" class=\"list-group-item\" id="+item.blogId+'commentNum'+" style=\"color:#1abc9c\"  onclick=\"CommentClick("+item.blogId+");return false;\"><img src=\"src/Retweet.png\">"+item.blogCommentNum+"</a>"+
                                                  "<a href=\"#\"  class=\"list-group-item\" style=\"color:#03a9f4\"><img src=\"src/Reply.png\" onclick=\"TransferClick("+item.blogId+");return false;\">"+item.blogTransferNum+"</a>"+
@@ -92,6 +99,7 @@
                                      "</div>"+
                                  "</div>"
             	                  );
+                	    		//appendChat(item);
                 	    	});
                 	    
                 	    },
@@ -102,6 +110,7 @@
                 	});
         		}
     function TranslateToRed(string,key){
+    	//alert(string)
     	if(string==""||string==null)	return string;
     	else 
     		string=string.replace(key,"<font color='#FF0000'><strong>"+key+"</strong></font>");

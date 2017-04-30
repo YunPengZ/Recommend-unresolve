@@ -36,7 +36,7 @@
             </div>
             <div class="col-md-1"><!--左侧边透明栏-->
                 <ul class="nav" style="opacity: 0.7;margin-top: 10px;margin-right: 0px;text-align: center">
-                    <li><a href="#" onclick="recClick()">推荐</a></li>
+                    <li><a href="#" onclick="recClick('推荐')">推荐</a></li>
                     <li><a href="#" onclick="recClick('搞笑')">搞笑</a></li>
                     <li><a href="#" onclick="recClick('情感')">情感</a></li>
                     <li><a href="#" onclick="recClick('社会')">社会</a></li>

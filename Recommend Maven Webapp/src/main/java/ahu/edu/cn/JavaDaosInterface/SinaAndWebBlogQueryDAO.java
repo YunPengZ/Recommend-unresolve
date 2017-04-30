@@ -9,9 +9,10 @@ public interface SinaAndWebBlogQueryDAO {
 	 * 查询所有微博
 	 * @param PageNum 查询第几页数据
 	 * @param PageSize 每页多少数据
+	 * @param recState 
 	 * @return subPage 对象
 	 */
-	public subPage<BlogBase> findAllBlog(int PageNum,int PageSize);
+	public subPage<BlogBase> findAllBlog(int PageNum,int PageSize, int recState);
 //	/**
 //	 * 查询所有热门微博
 //	 * @param PageNum 查询第几页数据
@@ -25,5 +26,5 @@ public interface SinaAndWebBlogQueryDAO {
 	 * @param PageSize 每页多少数据
 	 * @return subPage 对象
 	 */
-	public subPage<BlogBase> findRecBlog(Long UserId, int labelId,int PageNum, int PageSize);
+	public subPage<BlogBase> findRecBlog(Long UserId,int PageNum, int PageSize);
 }

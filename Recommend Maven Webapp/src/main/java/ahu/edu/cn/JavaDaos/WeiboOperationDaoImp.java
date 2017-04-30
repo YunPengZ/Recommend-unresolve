@@ -153,6 +153,9 @@ public class WeiboOperationDaoImp implements WeiboOperationDao {
 		//SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		java.util.Date time = new java.util.Date();
 		//System.out.println(utilDate+"java.util.Date");
+		/**
+		 * 需要改定，将点赞和评论的blogId改为1000000以上
+		 */
 		comment.setContent(content);
 		comment.setReviewerId(userId);
 		comment.setBlog(findBlogInfoById(blogId));
@@ -160,7 +163,7 @@ public class WeiboOperationDaoImp implements WeiboOperationDao {
 		session.save(comment);
 		if(blogId>1000000){
 			String hql="update sina_blog as blog set blog.blog_comment_num=blog.blog_comment_num+1 where blog.blog_id=?0";
-			Query query=session.createQuery(hql);
+			SQLQuery query=session.createSQLQuery(hql);
 			query.setParameter("0", blogId-1000000);
 			query.executeUpdate();
 		}

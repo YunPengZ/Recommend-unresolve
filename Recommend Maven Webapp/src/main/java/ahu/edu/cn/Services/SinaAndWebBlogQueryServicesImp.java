@@ -26,9 +26,9 @@ public class SinaAndWebBlogQueryServicesImp implements
 
 
 	@Override
-	public subPage<BlogBase> findAllBlog(int pageNum, int pageSize) {
+	public subPage<BlogBase> findAllBlog(int pageNum, int pageSize,int recState) {
 		
-		return  blogDao.findAllBlog(pageNum, pageSize);
+		return  blogDao.findAllBlog(pageNum, pageSize,recState);
 	}
 
 
@@ -47,9 +47,9 @@ public class SinaAndWebBlogQueryServicesImp implements
 
 
 	@Override
-	public subPage<BlogBase> findRecBlog(Long UserId, int labelId, int PageNum, int PageSize) {
+	public subPage<BlogBase> findRecBlog(Long UserId, int PageNum, int PageSize) {
 		// TODO 自动生成的方法存根
-		return blogDao.findRecBlog(UserId, labelId, PageNum, PageSize);
+		return blogDao.findRecBlog(UserId, PageNum, PageSize);
 	}
 
 }

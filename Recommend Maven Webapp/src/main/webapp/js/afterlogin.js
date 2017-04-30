@@ -207,6 +207,9 @@ var currentPage = 1;
      	
      	 websocket.send(JSON.stringify(json)); 
      }
+     function chatwith(blogAuthor){
+    	 
+     }
   	function openUserInfoWindow()
    	{
    		location.href="Profile.jsp?word="+ID;//其余功能暂不用

@@ -37,9 +37,9 @@ public class SinaAndWebBlogQueryController {
 	}
 	@RequestMapping("/query/allblog")
 	@ResponseBody
-	public subPage<BlogBase> login(int page_num){
+	public subPage<BlogBase> login(int page_num,int recState){
 
-		return services.findAllBlog(page_num, 6);
+		return services.findAllBlog(page_num, 6,recState);
 		
 	}
 	@RequestMapping("/query/hotblog")
@@ -56,8 +56,8 @@ public class SinaAndWebBlogQueryController {
 	}
 	@RequestMapping("/query/recblog")
 	@ResponseBody
-	public subPage<BlogBase> findRecBlog(int page_num,Long User_Id,int labelid){
-		subPage<BlogBase> bloglist=services.findRecBlog(User_Id,0,page_num, 6);
+	public subPage<BlogBase> findRecBlog(int page_num,Long User_Id){
+		subPage<BlogBase> bloglist=services.findRecBlog(User_Id,page_num, 6);
 		for(BlogBase blog : bloglist.getDataList()){
 			if(operationServices.PraiserIsExist(blog.getBlogId(),User_Id)){
 				blog.setUserLike("true");

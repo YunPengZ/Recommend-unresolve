@@ -26,6 +26,7 @@ public class WebSocketEndpoint extends TextWebSocketHandler {
 			JSONObject jsonObj = new JSONObject(message.getPayload());
 			
 			String clientMessage = jsonObj.getString("message");
+			String kind=jsonObj.getString("kind");
 			int from = jsonObj.getInt("from");
 			int to = jsonObj.getInt("to");
 			
@@ -33,11 +34,12 @@ public class WebSocketEndpoint extends TextWebSocketHandler {
 				JSONObject jsonfrom = new JSONObject();
 				jsonfrom.put("message",clientMessage);
 				jsonfrom.put("from", from);
+				jsonfrom.put("kind", kind);
 				
 				JSONObject jsonto = new JSONObject();
 				jsonto.put("message",clientMessage);
 				jsonto.put("from", from);
-				
+				jsonto.put("kind", kind);
 				
 				WebSocketSession oppositeSession =  onlinelist.get(to);
 				if(oppositeSession != null){

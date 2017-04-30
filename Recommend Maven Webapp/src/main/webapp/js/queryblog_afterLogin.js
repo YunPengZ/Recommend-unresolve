@@ -14,6 +14,10 @@
   	    type: "POST",   //请求方式
   	    success: function(data) { 
   	        totalRecord = data.totalRecord;
+  	      if(totalRecord<=0){
+	        	alert("本站微博已清空")
+	        	return ;
+	        }
   	    	var blogset=data.dataList;
         	    	//var praiseColor="color:#03a9f4";
         	    	$.each(blogset,function(i,item){
@@ -31,7 +35,7 @@
      	                           " <div class=\"card\"><!-- 转发微博的结构 -->"+
                                     " <div class=\"media-left\"><!-- 自己的头像 -->"+
                                          "<a href=\"#\">"+
-                                            " <img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                         "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                         " </a>"+
                                      "</div>"+
                                      "<div class=\"media-body\">"+
@@ -61,13 +65,14 @@
                                     "</div>"+
                                 " </div>"
      	    			);
+        	    			appendChat(item);
      	    		}else
      	    		$("#home").append(
     	    				 "<div class=\"row clearfix box\">"+
     	    				 " <div class=\"card\">"+
                                  "<div class=\"media-left\">"+
                                      "<a href=\"#\">"+
-                                         "<img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                     "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                      "</a>"+
                                  "</div>"+
                                  "<div class=\"media-body\">"+
@@ -85,6 +90,7 @@
                              "</div>"+
                          "</div>"
     	                  );
+        	    		appendChat(item);
         	    	});
         	    
         	    },
@@ -110,6 +116,10 @@
 	  	    type: "POST",   //请求方式
 	  	    success: function(data) { 
 	  	        totalRecord = data.totalRecord;
+	  	        if(totalRecord<=0){
+	  	        	alert("无推荐结果")
+	  	        	return ;
+	  	        }
 	  	    	var blogset=data.dataList;
 	        	    	//var praiseColor="color:#03a9f4";
 	        	    	$.each(blogset,function(i,item){
@@ -127,7 +137,7 @@
 	     	                           " <div class=\"card\"><!-- 转发微博的结构 -->"+
 	                                    " <div class=\"media-left\"><!-- 自己的头像 -->"+
 	                                         "<a href=\"#\">"+
-	                                            " <img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+	                                         "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
 	                                        " </a>"+
 	                                     "</div>"+
 	                                     "<div class=\"media-body\">"+
@@ -157,13 +167,14 @@
 	                                    "</div>"+
 	                                " </div>"
 	     	    			);
+	        	    			appendChat(item);
 	     	    		}else
 	     	    		$("#home").append(
 	    	    				 "<div class=\"row clearfix box\">"+
 	    	    				 " <div class=\"card\">"+
 	                                 "<div class=\"media-left\">"+
 	                                     "<a href=\"#\">"+
-	                                         "<img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+	                                     "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
 	                                     "</a>"+
 	                                 "</div>"+
 	                                 "<div class=\"media-body\">"+
@@ -181,6 +192,7 @@
 	                             "</div>"+
 	                         "</div>"
 	    	                  );
+	        	    		appendChat(item);
 	        	    	});
 	        	    
 	        	    },
@@ -208,7 +220,10 @@
      	    success: function(data) {
      	    	//alert(totalRecord)
      	        totalRecord = data.totalRecord;
-     	        
+     	       if(totalRecord<=0){
+	  	        	alert("尚未发布微博")
+	  	        	return ;
+	  	        }
      	    	var blogset=data.dataList;
      	    	$.each(blogset,function(i,item){
      	    		//alert(item.blogAuthor.userId)
@@ -227,7 +242,7 @@
  	                           " <div class=\"card\"><!-- 转发微博的结构 -->"+
                                 " <div class=\"media-left\"><!-- 自己的头像 -->"+
                                      "<a href=\"#\">"+ 
-                                        " <img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                     "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                     " </a>"+
                                  "</div>"+
                                  "<div class=\"media-body\">"+
@@ -257,6 +272,7 @@
                                 "</div>"+
                             " </div>"
  	    			);
+    	    			appendChat(item);
  	    		}else
  	    		$("#home").append(
 	    				 "<div class=\"row clearfix box\">"+
@@ -281,31 +297,9 @@
                          "</div>"+
                      "</div>"
 	                  );
+    	    		appendChat(item);
     	    	});
-     	    	 $(function () {
-                 	$('[data-toggle="popover7"]').popover({delay: {"show": 10, "hide": 2000}, placement: "left",trigger:"hover",content:"hhhhh",template:
-                  	     "<div class=\"box\" style=\"width: 300px; height: 150px\">"+
-                  	       "<div class=\"card-profile\" style=\"text-align:center\">"+
-                  	                "<div>"+"<img src=\"src/profile-bg.jpg\" style=\"width:100%\">"+ "</div>"+
-                  	                "<div style=\"position:relative;top:20px;transform:translate(0,-50%);min-width:150px\">"+
-                  	                    "<img src=\"src/user.png\" height=\"32\" class=\"img-thumbnail\" >"+
-                  	                    "<div style=\"font-size:80%;\">"+
-                  	                        "<a href=\"Profile.jsp\" style=\"color: #000000\">"+"sessionScope.User.username"+"</a>"+ 
-                  	                             "<button class=\"btn-xs btn-primary\">"+"私聊"+"</button>"+
-                  	                     "</div>"+
-                  	                "</div>"+
-                  	                "<div class=\"list-group list-group-horizontal\" style=\"height:30px;font-weight:bold\">"+
-                  	                    "<a href=\"#\" class=\"list-group-item\">"+ "关注" + "</a>"+
-                  	                    "<span>"+"|"+"</span>"+
-                  	                    "<a href=\"#\" class=\"list-group-item\">"+"粉丝"+"</a>"+
-                  	                    "<span>"+"|"+"</span>"+
-                  	                    "<a href=\"#\" class=\"list-group-item\">"+"微博"+"</a>"+
-                  	               "</div>"+ 
-                  	            "</div>"+
-                  	        "</div>"+
-                  	     "</div>"
-                  	        })
-         	})
+     	    	
     	    },
     	    error: function() {
     	        alert("出错");

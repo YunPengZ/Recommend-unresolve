@@ -81,7 +81,12 @@
         	blogState=7;
         	OnScrollQuery(1);
         }
-        
+        function searchClick(){
+		  	//totalRecord=6;
+        	blogState=4;//搜索导入的微博状态是4
+        	$("#home").empty();
+        	OnScrollQuery(1);
+        }
 		 function praiseClick(blogId){
 			 alert(blogId+' '+ID);
 			 $.ajax({
@@ -114,11 +119,7 @@
 		       }
 			 });
 		 }
-		  function searchClick(){
-	        	blogState=4;//搜索导入的微博状态是4
-	        	$("#home").empty();
-	        	search(1);
-	        }
+		  
 			function getNowFormatDate() {
 		   	    var date = new Date();
 		   	    var seperator1 = "-";
@@ -137,100 +138,20 @@
 		   	    return currentdate;
 		   	}
 			
-     //判断当前浏览器是否支持WebSocket
-     if ('WebSocket' in window) {
-         websocket = new WebSocket("ws://localhost:8080/Recommend/websocket");
-     }
-     else {
-         alert('当前浏览器 Not support websocket')
-     }
- 
-     //连接发生错误的回调方法
-     websocket.onerror = function () {
-       
-     };
- 
-     //连接成功建立的回调方法
-     websocket.onopen = function () {
-        
-     }
- 
-     //接收到消息的回调方法
-     websocket.onmessage = function (event) {
-          alert("");
-         var json=JSON.parse(event.data);
-         if(json.from == "${sessionScope.user.userId}"){
-         	$("#wchat").append
-         	( 
-         	"<div class=\"row box\">"+
-                "<div class=\"col-md-offset-7 col-md-5\">"+
-                       "<div class=\"media-body\">"+
-                              "<div class=\"card\">"+
-                                     "<p>"+json.message+"</p>"+
-                              "</div>"+
-                       "</div>"+
-                 "<div class=\"media-right\"><img class=\"media-object img-thumbnail\" src=\"src/user.png\"></div>"+
-                 "</div>"+                              
-             " </div>"
-         	);
-         }else{
-         $("#wchat").append
-         	( 
-            "<div class=\"row box\">"+
-                "<div class=\"col-md-5\">"+
-                      "<div class=\"media-left\"><img class=\"media-object img-thumbnail\" src=\"src/user.png\"></div>"+
-                      "<div class=\"media-body\">"+
-                            "<div class=\"card\">"+
-                                  "<p>"+json.message+"</p>"+
-                             "</div>"+
-                     " </div>"+
-                "</div>"+                             
-           "</div>"
-         	);
-         
-         
-         
-      
-         	
-         }
-     }
- 
-     //连接关闭的回调方法
-     websocket.onclose = function () {
-        
-     }
- 
-     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-     window.onbeforeunload = function () {
-        
-     }
- 
-     //将消息显示在网页上
-     function setMessageInnerHTML(innerHTML) {
-        
-     }
- 
-     //关闭WebSocket连接
-     function closeWebSocket() {
-        
-    }
- 
-     //发送消息
-     function send() {
-     
-     	var str = $("#wchatcontent").val();
-     
-     	var json={"from":"${sessionScope.user.userId}","to":1,"message":str};
-  
-     	
-     	 websocket.send(JSON.stringify(json)); 
-     }
   	function openUserInfoWindow()
    	{
    		location.href="Profile.jsp?word="+ID;//其余功能暂不用
    	}
   	function openCombine(){
   		location.href="combine.jsp?word="+ID;
+  	}
+  	var sdelay = 0;
+  	function returnTop() {
+  		alert("no use")
+  	    window.scrollBy(0, -100);//Only for y vertical-axis
+  	    if (document.body.scrollTop > 0) {
+  	        sdelay = setTimeout('returnTop()', 50);
+  	    }
   	}
 
         </script>
@@ -247,7 +168,7 @@
                         <div class="form-group">
                            <input type="text" value="Search" onfocus="this.value=''" id="search_input" class="form-control" placeholder="Search">
                         </div>
-                        <button class="btn btn-info" onclick="searchClick(); required"><i class="fa fa-search"></i>查找</button>
+                        <button class="btn btn-info" onclick="searchClick();return false;"><i class="fa fa-search"></i>查找</button>
                     </form>
                 </nav>
             </div>
@@ -264,7 +185,7 @@
                     <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" onclick="showHotBlog()">全部微博</a></li>
                     <li role="presentation"><a href="#comment" onclick="queryusercomments()"aria-controls="comment" role="tab" data-toggle="tab">评论<span class="badge" id="relate_comment"></span></a></li>
                     <li role="presentation"><a href="#like" onclick="queryuserpraise()"aria-controls="like" role="tab" data-toggle="tab">点赞<span class="badge" id="relate_praise"></span></a></li>
-                    <li role="presentation"><a href="#chat" onclick="chat()" aria-controls="chat" role="tab" data-toggle="tab">私信<span class="badge">99</span></a></li>
+                    <li role="presentation"><a href="#chat" id="chatLink" aria-controls="chat" role="tab" data-toggle="tab">私信<span class="badge">99</span></a></li>
                     <li><a onclick="openCombine()">修改资料</a></li>
                     <li><a href="logout.jsp">注销用户</a></li><!--注销用户-->
                 </ul>
@@ -312,41 +233,7 @@
                     </div>
                     
                     <div role="tabpanel" class="tab-pane" id="chat" style="padding-top: 2%;"><!-- 私信消息 -->
-                        <div class="panel panel-default"><!-- 聊天面板 -->
-                            <div class="panel-heading" style="text-align: center;">
-                                <p>与 user 对话中</p>
-                            </div>
-                            <div class="panel-body" style="min-height: 600px;"  id="wchat">
-                                <div class="row box"><!--对方消息-->
-                                    <div class="col-md-5">
-                                        <div class="media-left"><img class="media-object img-thumbnail" src="src/user.png"></div>
-                                        <div class="media-body">
-                                            <div class="card">
-                                                <p>消息内容</p>
-                                            </div>
-                                        </div>
-                                    </div>                              
-                                </div>
-                                <div class="row box"><!--己方消息-->
-                                    <div class="col-md-offset-7 col-md-5">
-                                        <div class="media-body">
-                                            <div class="card">
-                                                <p>消息内容</p>
-                                            </div>
-                                        </div>
-                                        <div class="media-right"><img class="media-object img-thumbnail" src="src/user.png"></div>
-                                    </div>                              
-                                </div>
-                            </div>
-                            <div class="panel-heading">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" aria-label="..." id="wchatcontent">
-                                    <div class="input-group-btn">
-                                        <button type="button" id="send"  onclick="send()" class="btn btn-default" style="background-color:#fa7a38;color:#ffffff;" >发布</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>  
                 </div>
                 
@@ -402,7 +289,7 @@
     </div>
     </div><!--流动容器Ending-->
     <div id="topbtn"><!--回到顶部按钮-->
-        <a href="javascript:returnTop()" style="color: #ffffff;text-align: center;"><i class="fa fa-arrow-circle-up fa-2x"></i></a>
+        <a href="#" onclick="returnTop();return false" style="color: #ffffff;text-align: center;display:block;height:100%;width:100%"><i class="fa fa-arrow-circle-up fa-2x">返回顶部</i></a>
     </div>
        
         <script src="js/bootstrap.min.js"></script>

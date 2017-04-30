@@ -1,26 +1,58 @@
        var currentPage = 1;
        var pageNum = 1;
        var pageSize = 6;
-       var totalRecord = 10 ;
+       var totalRecord = 6 ;
+       var blogState=0;
+       var recBlogState=0;
        $(function (){
        		bindScrollEvent();
-       		QueryBlog(1);
+       		QueryRecBlog(1,0);
        		queryTopics();
        })
-        function QueryBlog(pageNumber) {
-            if(pageNumber  * pageSize > totalRecord){
-               alert("没有更多微博！");
-               $(window).unbind("scroll");
+       function recClick(recState){
+    	  // alert(recState)
+    	   $('#home').empty();
+    	   switch(recState){
+    	   case "推荐":QueryRecBlog(1,0);
+    	   blogState=0;
+		   break;
+    	   case "搞笑":QueryRecBlog(1,4);
+    	   blogState=4;
+    	   break;
+    	   case "情感":QueryRecBlog(1,21);
+    	   blogState=21;
+    	   break;
+    	   case "社会":QueryRecBlog(1,3);
+    	   blogState=3;
+    	   break;
+    	   case "明星":QueryRecBlog(1,6);
+    	   blogState=6;
+    	   break;
+    	   }
+    		  
+    	   
+       }
+       //function QueryRecBlog(pageNumber)
+        function QueryRecBlog(pageNumber,blogState) {
+        	//alert(pageNumber+blogState)
+            if((pageNumber -1)* pageSize > totalRecord){
+              // alert("没有更多微博！");
+               //$(window).unbind("scroll");
                return ;
             }
         	$.ajax({
         		url: "query/allblog",    //请求的url地址
         	    dataType: "JSON",   //返回格式为json
         	    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
-        	    data: {"page_num": pageNumber},    //参数值
+        	    data: {"page_num": pageNumber,
+        	    	"recState":blogState},    //参数值
         	    type: "POST",   //请求方式
         	    success: function(data) {
-        	        var totalRecord = data.totalRecord;
+        	        totalRecord = data.totalRecord;
+        	        if(totalRecord<=0){
+        	        	alert("无此类微博");
+        	        	return ;
+        	        }
         	    	var blogset=data.dataList;
         	    	$.each(blogset,function(i,item){
         	    		//检查是否点赞
@@ -181,7 +213,7 @@
 			var winScrollHeight = $(window).scrollTop(); // 获取滚动条滚动的距离
 			if(docHeight -30 <= winHeight + winScrollHeight){
 				currentPage ++;
-				QueryBlog(currentPage);
+				QueryRecBlog(currentPage,blogState);
 				
 			}
 			

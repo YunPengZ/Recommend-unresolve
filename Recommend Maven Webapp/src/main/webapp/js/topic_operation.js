@@ -36,13 +36,13 @@
          	    			imgSrc="src/Praise.png";//未点赞
         	    			praiseColor="color:#03a9f4";
          	    		}
-        	    		alert(item.blogTopic)
+        	    		//alert(item.blogTopic)
         	    		if(item.blogParent!=null){//转发后的微博设置未true
         	    			$("#home").append(
      	                           " <div class=\"card\"><!-- 转发微博的结构 -->"+
                                     " <div class=\"media-left\"><!-- 自己的头像 -->"+
                                          "<a href=\"#\">"+
-                                            " <img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                         	"<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                         " </a>"+
                                      "</div>"+
                                      "<div class=\"media-body\">"+
@@ -74,13 +74,14 @@
                                     "</div>"+
                                 " </div>"
      	    			);
+        	    			appendChat(item);
      	    		}else
      	    		$("#home").append(
     	    				 "<div class=\"row clearfix box\">"+
     	    				 " <div class=\"card\">"+
                                  "<div class=\"media-left\">"+
                                      "<a href=\"#\">"+
-                                         "<img class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
+                                     "<img  data-container=\"body\"  data-toggle=\"popover"+item.blogId+"\" class=\"media-object img-thumbnail\" src=\"src/user.png\" alt=\"...\">"+
                                      "</a>"+
                                  "</div>"+
                                  "<div class=\"media-body\">"+
@@ -100,6 +101,7 @@
                              "</div>"+
                          "</div>"
     	                  );
+        	    		appendChat(item);
         	    	});
         	    
         	    },
