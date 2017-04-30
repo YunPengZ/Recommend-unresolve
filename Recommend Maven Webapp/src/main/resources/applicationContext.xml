@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- 加载数据库信息 -->
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <property name="url" value="${jdbc.jdbcUrl}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+	</bean>
+	  <!-- 配置hibernate 的sessionFactory实例 -->
+	 <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	 	<property name="dataSource" ref="dataSource"></property>
+	
+		<property name="configLocation"
+  			 value="classpath:hibernate.cfg.xml">
+  		</property>
+  		<property name="annotatedClasses">
+     		<list>
+       			<value>ahu.edu.cn.JavaBeans.WeiboUser</value>
+       			<value>ahu.edu.cn.JavaBeans.BlogInfo</value>
+       		    <value>ahu.edu.cn.JavaBeans.SinaUser</value>
+       		    <value>ahu.edu.cn.JavaBeans.TopicInfo</value>
+       		     <value>ahu.edu.cn.JavaBeans.PraiserInfo</value>
+       		     <value>ahu.edu.cn.JavaBeans.CommentInfo</value>
+       		      <value>ahu.edu.cn.JavaBeans.UserFans</value>
+       		       <value>ahu.edu.cn.JavaBeans.UserFollow</value>
+       		    <value>ahu.edu.cn.JavaBeans.SinaBlogInfo</value>
+     		</list>
+   		</property>
+	</bean>
+	
+	<!-- 配置  WeiboUserDao-->
+	<bean id="userDao" class="ahu.edu.cn.JavaDaos.WeiboUserDAOImp">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 配置WeiboUserServices -->
+	<bean id="userServices" class="ahu.edu.cn.Services.WeiboUserServicesImp">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	
+	<!-- 配置  queryBlogDao-->
+	<bean id="blogDao" class="ahu.edu.cn.JavaDaos.SinaAndWebBlogQueryImp">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 配置WqueryBlogServices -->
+	<bean id="blogServices" class="ahu.edu.cn.Services.SinaAndWebBlogQueryServicesImp">
+		<property name="blogDao" ref="blogDao"></property>
+	</bean>
+	<!--配置WeiboOperationDao - -->
+	<bean id="operationDao" class="ahu.edu.cn.JavaDaos.WeiboOperationDaoImp">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 配置WeiboOperationServices -->
+	<bean id="operationServices" class="ahu.edu.cn.Services.WeiboOperationServicesImp">
+		<property name="operationDao" ref="operationDao"></property>
+	</bean>
+
+	<bean id="topicDao" class="ahu.edu.cn.JavaDaos.SinaTopicDaoImp">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="topicServices" class="ahu.edu.cn.Services.SinaTopicServicesImp">
+		<property name="topicDao" ref="topicDao"></property>
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="transcationManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transcationManager">
+		<tx:attributes>
+			<tx:method name="*" />	
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* ahu.edu.cn.*.*.*(..))" id="txPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config>
+ 
+
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="ahu.edu.cn.Util.StringToEnumConverterFactory" />
+            </set>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,31 @@
+
+#container { 
+    width:950px;
+    position:relative;
+    margin:0 auto;
+}
+
+#home_page {
+    background-color: #ABFFA8!important;
+}
+
+.blank_bar {
+    background-color: #D3FFD1!important;
+}
+.bs a {
+    display:block;
+    width:10px;
+    height:9px;
+    margin-right:10px;
+    float:right;
+    display:inline;
+    }
+.bs .a1 {
+    background:url(../src/orange.gif) no-repeat;
+}
+.bs .a2 {
+    background:url(../src/green2.gif) no-repeat;
+}
+.bs .a3 {
+    background:url(../src/blue.gif) no-repeat;
+}

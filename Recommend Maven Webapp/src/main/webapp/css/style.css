@@ -1,0 +1,11 @@
+#user_name_div a{
+    text-decoration:none;
+    color:#000;
+}
+
+#user_name_div a:hover{
+    text-decoration:none;
+    color:#bd5d5d;
+}
+.col-md-1 ul li{
+    width:100%;
